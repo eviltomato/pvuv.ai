@@ -59,7 +59,7 @@ function run(cmd, args, { input, quiet = true } = {}) {
     cwd: ROOT, input, encoding: 'utf8',
     stdio: ['pipe', 'pipe', quiet ? 'pipe' : 'inherit'],
   });
-  return { code: r.status ?? 1, out: (r.stdout || '') + (r.stderr || '') };
+  return { code: r.status ?? 1, out: (r.stdout || '') + (r.stderr || ''), stdout: r.stdout || '' };
 }
 const wrangler = (args, opts) => run('npx', ['--yes', 'wrangler', ...args], opts);
 
@@ -297,7 +297,7 @@ function findD1Id(name) {
   if (DRY) return '<d1-database-id>';
   const r = wrangler(['d1', 'list', '--json']);
   try {
-    const row = JSON.parse(r.out.slice(r.out.indexOf('['))).find((d) => d.name === name);
+    const row = JSON.parse(r.stdout.slice(r.stdout.indexOf('['))).find((d) => d.name === name);
     if (row?.uuid) return row.uuid;
   } catch { /* fall through to the message below */ }
   say(c.r(`  Could not find the id for D1 database "${name}".`));
@@ -309,7 +309,7 @@ function findKvId(binding) {
   if (DRY) return `<kv-${binding.toLowerCase()}-id>`;
   const r = wrangler(['kv', 'namespace', 'list']);
   try {
-    const arr = JSON.parse(r.out.slice(r.out.indexOf('[')));
+    const arr = JSON.parse(r.stdout.slice(r.stdout.indexOf('[')));
     // wrangler titles namespaces "<worker-name>-<BINDING>"; match the suffix
     const row = arr.find((n) => n.title === binding || n.title?.endsWith(`-${binding}`));
     if (row?.id) return row.id;

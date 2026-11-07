@@ -15,6 +15,7 @@
     "postinstall": "node scripts/gen-config.mjs",
     "build:sdk": "npm run config:gen && node sdk/build.mjs",
     "config:gen": "node scripts/gen-config.mjs",
+    "ci:prepare": "node scripts/ci-prepare.mjs",
     "dev:ingest": "wrangler dev -c workers/ingest/wrangler.toml",
     "dev:consumer": "wrangler dev -c workers/consumer/wrangler.toml",
     "dev:api": "wrangler dev -c workers/api/wrangler.toml",

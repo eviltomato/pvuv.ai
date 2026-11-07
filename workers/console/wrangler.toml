@@ -22,7 +22,7 @@ account_id = "PLACEHOLDER_ACCOUNT_ID"
 # Custom Domain — wrangler provisions DNS + certificate. This hostname is served
 # entirely by the console worker, so use a host you are not already serving from.
 routes = [
-  { pattern = "pvuv.ai", custom_domain = true }
+  { pattern = "PLACEHOLDER_CONSOLE_HOST", custom_domain = true }
 ]
 
 # KV: write-through site-config cache on site create/update (§5 whitelist)
@@ -47,7 +47,7 @@ ADMIN_EMAILS = "you@example.com"
 # from its own hostname once the two are not siblings (e.g. console on
 # pvuv.example.com, ingest on in.example.com), and guessing wrong produces a
 # snippet that silently sends events nowhere.
-INGEST_HOST = "in.pvuv.ai"
+INGEST_HOST = "PLACEHOLDER_INGEST_HOST"
 
 GOOGLE_CLIENT_ID = ""
 GITHUB_CLIENT_ID = ""
