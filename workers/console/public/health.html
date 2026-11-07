@@ -180,8 +180,18 @@ async function run() {
 
 $('ingestUrl').value = defaultIngest();
 $('run').addEventListener('click', run);
-// make sure we're logged in before showing anything actionable
-fetch('/api/me').then((r) => { if (r.status === 401) location.href = '/login.html'; });
+// Prefer the deployment's own ingest host (wrangler.toml [vars] INGEST_HOST),
+// the same source sites.html builds the embed snippet from. Without it, a
+// console served from a subdomain other than the apex guesses
+// in.analytics.example.com, which does not exist — and a healthy deployment
+// then fails steps 2-4.
+fetch('/api/me').then(async (r) => {
+  if (r.status === 401) { location.href = '/login.html'; return; }
+  try {
+    const me = await r.json();
+    if (me && me.ingest_host) $('ingestUrl').value = `https://${me.ingest_host}`;
+  } catch { /* keep the sibling guess */ }
+});
 </script>
 </body>
 </html>
